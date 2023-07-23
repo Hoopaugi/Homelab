@@ -28,10 +28,25 @@ services:
     volumes:
       - qbittorrent_config:/config
       - ${DOWNLOAD_ROOT}:/downloads
+    network_mode: service:vpn
+    depends_on:
+      - vpn
+    restart: unless-stopped
+  vpn:
+    container_name: vpn
+    image: ghcr.io/bubuntux/nordvpn
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - TOKEN=${VPN_TOKEN}
+      - CONNECT=P2P
+      - TECHNOLOGY=NordLynx
+      - NETWORK=192.168.2.0/24
     ports:
       - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
     restart: unless-stopped
 volumes:
   pihole_etc-pihole:
