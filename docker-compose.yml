@@ -28,21 +28,20 @@ services:
     volumes:
       - qbittorrent_config:/config
       - ${DOWNLOAD_ROOT}:/downloads
-    network_mode: service:vpn
+    network_mode: service:nordlynx
     depends_on:
-      - vpn
+      - nordlynx
     restart: unless-stopped
-  vpn:
-    container_name: vpn
-    image: ghcr.io/bubuntux/nordvpn
+  nordlynx:
+    container_name: nordlynx
+    image: ghcr.io/bubuntux/nordlynx
     cap_add:
       - NET_ADMIN
-      - NET_RAW
     environment:
-      - TOKEN=${VPN_TOKEN}
-      - CONNECT=P2P
-      - TECHNOLOGY=NordLynx
-      - NETWORK=192.168.2.0/24
+      TZ: ${TZ}
+      NET_LOCAL: ${NET_LOCAL}
+      QUERY: filters\[servers_groups\]\[identifier\]=legacy_p2p
+      PRIVATE_KEY: ${VPN_PRIVATE_KEY}
     ports:
       - 8080:8080
     sysctls:
