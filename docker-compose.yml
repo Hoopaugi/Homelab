@@ -92,3 +92,5 @@ volumes:
   pihole_etc-dnsmasq.d:
   qbittorrent_config:
   prowlarr_config:
+  sonarr_config:
+  radarr_config:
