@@ -16,6 +16,24 @@ services:
       - 'pihole_etc-pihole:/etc/pihole'
       - 'pihole_etc-dnsmasq.d:/etc/dnsmasq.d'
     restart: unless-stopped
+  # Media Services
+  qbittorrent:
+    container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+      WEBUI_PORT: 8080
+    volumes:
+      - qbittorrent_config:/config
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
 volumes:
   pihole_etc-pihole:
   pihole_etc-dnsmasq.d:
+  qbittorrent_config:
