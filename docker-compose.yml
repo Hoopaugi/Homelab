@@ -7,10 +7,10 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "13380:13380/tcp"
+      - "30080:30080/tcp"
     environment:
       TZ: '${TZ}'
-      WEB_PORT: 13380
+      WEB_PORT: 30080
       WEBPASSWORD: '${PIHOLE_WEBPASSWORD}'
       PIHOLE_DNS_: '1.1.1.1;1.0.0.1'
       FTLCONF_LOCAL_IPV4: '${PIHOLE_SERVER_ADDRESS}'
@@ -20,9 +20,9 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
       - "traefik.enable=true"
-      - "traefik.http.routers.pihole.rule=Host(`pihole.local`)"
+      - "traefik.http.routers.pihole.rule=Host(`pihole.homelab`)"
       - "traefik.http.routers.pihole.entrypoints=web"
-      - "traefik.http.services.pihole.loadbalancer.server.port=13380"
+      - "traefik.http.services.pihole.loadbalancer.server.port=30080"
     restart: unless-stopped
   traefik:
     container_name: traefik
