@@ -42,6 +42,16 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
   # Media Services
   jellyfin:
     container_name: jellyfin
@@ -198,3 +208,4 @@ volumes:
   audiobookshelf_metadata:
   uptime-kuma_config:
   lidarr_config:
+  grafana-data:
