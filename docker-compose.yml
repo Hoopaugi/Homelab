@@ -19,6 +19,7 @@ services:
       - 'pihole_etc-dnsmasq.d:/etc/dnsmasq.d'
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.http.routers.pihole.rule=Host(`pihole.local`)"
     restart: unless-stopped
   traefik:
     image: traefik:v2.10
