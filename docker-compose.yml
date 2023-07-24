@@ -22,8 +22,10 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.pihole.rule=Host(`pihole.local`)"
       - "traefik.http.routers.pihole.entrypoints=web"
+      - "traefik.http.services.pihole.loadbalancer.server.port=13380"
     restart: unless-stopped
   traefik:
+    container_name: traefik
     image: traefik:v2.10
     command:
       - "--api.insecure=true"
