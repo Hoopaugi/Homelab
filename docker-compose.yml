@@ -19,11 +19,17 @@ services:
       - 'pihole_etc-dnsmasq.d:/etc/dnsmasq.d'
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
       - "traefik.http.routers.pihole.rule=Host(`pihole.local`)"
+      - "traefik.http.routers.pihole.entrypoints=web"
     restart: unless-stopped
   traefik:
     image: traefik:v2.10
-    command: --api.insecure=true --providers.docker
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
     ports:
       - 80:80
       - 8080:8080
