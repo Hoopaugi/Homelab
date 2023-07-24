@@ -7,10 +7,10 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "10080:10080/tcp"
+      - "13380:13380/tcp"
     environment:
       TZ: '${TZ}'
-      WEB_PORT: 10080
+      WEB_PORT: 13380
       WEBPASSWORD: '${PIHOLE_WEBPASSWORD}'
       PIHOLE_DNS_: '1.1.1.1;1.0.0.1'
       FTLCONF_LOCAL_IPV4: '${PIHOLE_SERVER_ADDRESS}'
