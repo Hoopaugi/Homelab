@@ -31,6 +31,17 @@ services:
     ports:
       - 8096:8096
     restart: unless-stopped
+  audiobookshelf:
+    container_name: audiobookshelf
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - 13378:80
+    volumes:
+      - ${MEDIA_ROOT}/audiobooks:/audiobooks
+      - ${MEDIA_ROOT}/podcasts:/podcasts
+      - audiobookshelf_config:/config
+      - audiobookshelf_metadata:/metadata
+    restart: unless-stopped
   radarr:
     container_name: radarr
     image: lscr.io/linuxserver/radarr:latest
@@ -125,3 +136,5 @@ volumes:
   radarr_config:
   jellyfin_config:
   readarr_config:
+  audiobookshelf_config:
+  audiobookshelf_metadata:
