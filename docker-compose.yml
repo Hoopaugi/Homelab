@@ -59,6 +59,20 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
+  readarr:
+    container_name: readarr
+    image: lscr.io/linuxserver/readarr:develop
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - readarr_config:/config
+      - ${MEDIA_ROOT}/books:/books #optional
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 8787:8787
+    restart: unless-stopped
   prowlarr:
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
@@ -109,3 +123,4 @@ volumes:
   sonarr_config:
   radarr_config:
   jellyfin_config:
+  readarr_config:
