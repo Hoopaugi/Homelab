@@ -1,5 +1,6 @@
 version: "3"
 services:
+  # Management
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -15,6 +16,21 @@ services:
     volumes:
       - 'pihole_etc-pihole:/etc/pihole'
       - 'pihole_etc-dnsmasq.d:/etc/dnsmasq.d'
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: ${TZ}
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_LABEL_ENABLE: true
+      WATCHTOWER_INCLUDE_RESTARTING: true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   # Media Services
   jellyfin:
@@ -30,6 +46,8 @@ services:
       - ${MEDIA_ROOT}/movies:/data/movies
     ports:
       - 8096:8096
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   audiobookshelf:
     container_name: audiobookshelf
@@ -41,6 +59,8 @@ services:
       - ${MEDIA_ROOT}/podcasts:/podcasts
       - audiobookshelf_config:/config
       - audiobookshelf_metadata:/metadata
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   radarr:
     container_name: radarr
@@ -55,6 +75,8 @@ services:
       - ${DOWNLOAD_ROOT}:/downloads
     ports:
       - 7878:7878
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   sonarr:
     container_name: sonarr
@@ -69,6 +91,8 @@ services:
       - ${DOWNLOAD_ROOT}:/downloads
     ports:
       - 8989:8989
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   readarr:
     container_name: readarr
@@ -84,6 +108,8 @@ services:
       - ${DOWNLOAD_ROOT}:/downloads
     ports:
       - 8787:8787
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   prowlarr:
     container_name: prowlarr
@@ -96,6 +122,8 @@ services:
       - prowlarr_config:/config
     ports:
       - 9696:9696
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   qbittorrent:
     container_name: qbittorrent
@@ -111,6 +139,8 @@ services:
     network_mode: service:nordlynx
     depends_on:
       - nordlynx
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
   nordlynx:
     container_name: nordlynx
@@ -126,6 +156,8 @@ services:
       - 8080:8080
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
 volumes:
   pihole_etc-pihole:
