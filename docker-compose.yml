@@ -32,6 +32,16 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma:latest
+    volumes:
+      - uptime-kuma_config:/app/data
+    ports:
+      - 3001:3001
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
   # Media Services
   jellyfin:
     container_name: jellyfin
@@ -170,3 +180,4 @@ volumes:
   readarr_config:
   audiobookshelf_config:
   audiobookshelf_metadata:
+  uptime-kuma_config:
