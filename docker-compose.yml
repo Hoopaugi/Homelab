@@ -68,7 +68,8 @@ services:
       PGID: 1000
     volumes:
       - readarr_config:/config
-      - ${MEDIA_ROOT}/books:/books #optional
+      - ${MEDIA_ROOT}/ebooks:/ebooks
+      - ${MEDIA_ROOT}/audiobooks:/audiobooks
       - ${DOWNLOAD_ROOT}:/downloads
     ports:
       - 8787:8787
