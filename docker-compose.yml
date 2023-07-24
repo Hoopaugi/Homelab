@@ -19,6 +19,14 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
+  traefik:
+    image: traefik:v2.10
+    command: --api.insecure=true --providers.docker
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower
@@ -181,7 +189,7 @@ services:
       TZ: '${TZ}'
       PUID: 1000
       PGID: 1000
-      WEBUI_PORT: 8080
+      WEBUI_PORT: 8081
     volumes:
       - qbittorrent_config:/config
       - ${DOWNLOAD_ROOT}:/downloads
@@ -202,7 +210,7 @@ services:
       QUERY: filters\[servers_groups\]\[identifier\]=legacy_p2p
       PRIVATE_KEY: ${VPN_PRIVATE_KEY}
     ports:
-      - 8080:8080
+      - 8081:8081
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
     labels:
