@@ -88,6 +88,22 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
+  lidarr:
+    container_name: lidarr
+    image: lscr.io/linuxserver/lidarr:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - lidarr_config:/config
+      - ${MEDIA_ROOT}/music:/music
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 8686:8686
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
   sonarr:
     container_name: sonarr
     image: lscr.io/linuxserver/sonarr:latest
@@ -181,3 +197,4 @@ volumes:
   audiobookshelf_config:
   audiobookshelf_metadata:
   uptime-kuma_config:
+  lidarr_config:
