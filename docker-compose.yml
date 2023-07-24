@@ -52,6 +52,19 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
   # Media Services
   jellyfin:
     container_name: jellyfin
@@ -209,3 +222,4 @@ volumes:
   uptime-kuma_config:
   lidarr_config:
   grafana-data:
+  prometheus-data:
