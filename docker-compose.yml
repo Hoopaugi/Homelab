@@ -1,6 +1,21 @@
-version: "3"
+version: "3.8"
+
 services:
   # Management
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.homelab`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    restart: unless-stopped
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -24,60 +39,6 @@ services:
       - "traefik.http.routers.pihole.entrypoints=web"
       - "traefik.http.services.pihole.loadbalancer.server.port=30080"
     restart: unless-stopped
-  traefik:
-    container_name: traefik
-    image: traefik:v2.10
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - 80:80
-      - 8080:8080
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-  watchtower:
-    container_name: watchtower
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      TZ: ${TZ}
-      WATCHTOWER_CLEANUP: true
-      WATCHTOWER_LABEL_ENABLE: true
-      WATCHTOWER_INCLUDE_RESTARTING: true
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    restart: unless-stopped
-  uptime-kuma:
-    container_name: uptime-kuma
-    image: louislam/uptime-kuma:latest
-    volumes:
-      - uptime-kuma_config:/app/data
-    ports:
-      - 3001:3001
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime-kuma.homelab`)"
-      - "traefik.http.routers.uptime-kuma.entrypoints=web"
-      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
-    restart: unless-stopped
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:latest
-    ports:
-      - 3000:3000
-    volumes:
-      - grafana-data:/var/lib/grafana
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.homelab`)"
-      - "traefik.http.routers.grafana.entrypoints=web"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-    restart: unless-stopped
   prometheus:
     container_name: prometheus
     image: prom/prometheus
@@ -95,7 +56,65 @@ services:
       - "traefik.http.routers.prometheus.entrypoints=web"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     restart: unless-stopped
+  traefik:
+    container_name: traefik
+    image: traefik:v2.10
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma:latest
+    volumes:
+      - uptime-kuma_config:/app/data
+    ports:
+      - 3001:3001
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime-kuma.homelab`)"
+      - "traefik.http.routers.uptime-kuma.entrypoints=web"
+      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
+    restart: unless-stopped
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: ${TZ}
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_LABEL_ENABLE: true
+      WATCHTOWER_INCLUDE_RESTARTING: true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
   # Media Services
+  audiobookshelf:
+    # TODO: Fix traefik proxy
+    container_name: audiobookshelf
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - 13378:80
+    volumes:
+      - ${MEDIA_ROOT}/audiobooks:/audiobooks
+      - ${MEDIA_ROOT}/podcasts:/podcasts
+      - audiobookshelf_config:/config
+      - audiobookshelf_metadata:/metadata
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.homelab`)"
+      - "traefik.http.routers.audiobookshelf.entrypoints=web"
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=13378"
+    restart: unless-stopped
   jellyfin:
     container_name: jellyfin
     image: lscr.io/linuxserver/jellyfin:latest
@@ -115,44 +134,6 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.homelab`)"
       - "traefik.http.routers.jellyfin.entrypoints=web"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-    restart: unless-stopped
-  audiobookshelf:
-    # TODO: Fix traefik proxy
-    container_name: audiobookshelf
-    image: ghcr.io/advplyr/audiobookshelf:latest
-    ports:
-      - 13378:80
-    volumes:
-      - ${MEDIA_ROOT}/audiobooks:/audiobooks
-      - ${MEDIA_ROOT}/podcasts:/podcasts
-      - audiobookshelf_config:/config
-      - audiobookshelf_metadata:/metadata
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.homelab`)"
-      - "traefik.http.routers.audiobookshelf.entrypoints=web"
-      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=13378"
-    restart: unless-stopped
-  radarr:
-    container_name: radarr
-    image: lscr.io/linuxserver/radarr:latest
-    environment:
-      TZ: '${TZ}'
-      PUID: 1000
-      PGID: 1000
-    volumes:
-      - radarr_config:/config
-      - ${MEDIA_ROOT}/movies:/movies
-      - ${DOWNLOAD_ROOT}:/downloads
-    ports:
-      - 7878:7878
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.homelab`)"
-      - "traefik.http.routers.radarr.entrypoints=web"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
     restart: unless-stopped
   lidarr:
     container_name: lidarr
@@ -174,46 +155,22 @@ services:
       - "traefik.http.routers.lidarr.entrypoints=web"
       - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
     restart: unless-stopped
-  sonarr:
-    container_name: sonarr
-    image: lscr.io/linuxserver/sonarr:latest
+  nordlynx:
+    container_name: nordlynx
+    image: ghcr.io/bubuntux/nordlynx
+    cap_add:
+      - NET_ADMIN
     environment:
-      TZ: '${TZ}'
-      PUID: 1000
-      PGID: 1000
-    volumes:
-      - sonarr_config:/config
-      - ${MEDIA_ROOT}/shows:/shows
-      - ${DOWNLOAD_ROOT}:/downloads
+      TZ: ${TZ}
+      NET_LOCAL: ${NET_LOCAL}
+      QUERY: filters\[servers_groups\]\[identifier\]=legacy_p2p
+      PRIVATE_KEY: ${VPN_PRIVATE_KEY}
     ports:
-      - 8989:8989
+      - 8081:8081
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.homelab`)"
-      - "traefik.http.routers.sonarr.entrypoints=web"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-    restart: unless-stopped
-  readarr:
-    container_name: readarr
-    image: lscr.io/linuxserver/readarr:develop
-    environment:
-      TZ: '${TZ}'
-      PUID: 1000
-      PGID: 1000
-    volumes:
-      - readarr_config:/config
-      - ${MEDIA_ROOT}/ebooks:/ebooks
-      - ${MEDIA_ROOT}/audiobooks:/audiobooks
-      - ${DOWNLOAD_ROOT}:/downloads
-    ports:
-      - 8787:8787
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.readarr.rule=Host(`readarr.homelab`)"
-      - "traefik.http.routers.readarr.entrypoints=web"
-      - "traefik.http.services.readarr.loadbalancer.server.port=8787"
     restart: unless-stopped
   prowlarr:
     container_name: prowlarr
@@ -254,35 +211,80 @@ services:
       - "traefik.http.routers.qbittorrent.entrypoints=web"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8081"
     restart: unless-stopped
-  nordlynx:
-    container_name: nordlynx
-    image: ghcr.io/bubuntux/nordlynx
-    cap_add:
-      - NET_ADMIN
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
     environment:
-      TZ: ${TZ}
-      NET_LOCAL: ${NET_LOCAL}
-      QUERY: filters\[servers_groups\]\[identifier\]=legacy_p2p
-      PRIVATE_KEY: ${VPN_PRIVATE_KEY}
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - radarr_config:/config
+      - ${MEDIA_ROOT}/movies:/movies
+      - ${DOWNLOAD_ROOT}:/downloads
     ports:
-      - 8081:8081
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
+      - 7878:7878
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.homelab`)"
+      - "traefik.http.routers.radarr.entrypoints=web"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
     restart: unless-stopped
+  readarr:
+    container_name: readarr
+    image: lscr.io/linuxserver/readarr:develop
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - readarr_config:/config
+      - ${MEDIA_ROOT}/ebooks:/ebooks
+      - ${MEDIA_ROOT}/audiobooks:/audiobooks
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 8787:8787
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.readarr.rule=Host(`readarr.homelab`)"
+      - "traefik.http.routers.readarr.entrypoints=web"
+      - "traefik.http.services.readarr.loadbalancer.server.port=8787"
+    restart: unless-stopped
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - sonarr_config:/config
+      - ${MEDIA_ROOT}/shows:/shows
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 8989:8989
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.homelab`)"
+      - "traefik.http.routers.sonarr.entrypoints=web"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    restart: unless-stopped
+
 volumes:
-  pihole_etc-pihole:
-  pihole_etc-dnsmasq.d:
-  qbittorrent_config:
-  prowlarr_config:
-  sonarr_config:
-  radarr_config:
-  jellyfin_config:
-  readarr_config:
   audiobookshelf_config:
   audiobookshelf_metadata:
-  uptime-kuma_config:
-  lidarr_config:
   grafana-data:
+  jellyfin_config:
+  lidarr_config:
+  pihole_etc-dnsmasq.d:
+  pihole_etc-pihole:
   prometheus-data:
+  prowlarr_config:
+  qbittorrent_config:
+  radarr_config:
+  readarr_config:
+  sonarr_config:
+  uptime-kuma_config:
