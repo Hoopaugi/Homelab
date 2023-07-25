@@ -228,6 +228,10 @@ services:
       - 9696:9696
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.homelab`)"
+      - "traefik.http.routers.prowlarr.entrypoints=web"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
     restart: unless-stopped
   qbittorrent:
     container_name: qbittorrent
