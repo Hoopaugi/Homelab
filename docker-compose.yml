@@ -90,6 +90,10 @@ services:
       - prometheus-data:/prometheus
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.homelab`)"
+      - "traefik.http.routers.prometheus.entrypoints=web"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     restart: unless-stopped
   # Media Services
   jellyfin:
