@@ -169,6 +169,10 @@ services:
       - 8686:8686
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.lidarr.rule=Host(`lidarr.homelab`)"
+      - "traefik.http.routers.lidarr.entrypoints=web"
+      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
     restart: unless-stopped
   sonarr:
     container_name: sonarr
