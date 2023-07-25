@@ -73,6 +73,10 @@ services:
       - grafana-data:/var/lib/grafana
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.homelab`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     restart: unless-stopped
   prometheus:
     container_name: prometheus
