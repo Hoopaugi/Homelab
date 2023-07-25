@@ -128,6 +128,10 @@ services:
       - audiobookshelf_metadata:/metadata
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.homelab`)"
+      - "traefik.http.routers.audiobookshelf.entrypoints=web"
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=13378"
     restart: unless-stopped
   radarr:
     container_name: radarr
