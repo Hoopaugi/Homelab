@@ -249,6 +249,10 @@ services:
       - nordlynx
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.homelab`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=web"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8081"
     restart: unless-stopped
   nordlynx:
     container_name: nordlynx
