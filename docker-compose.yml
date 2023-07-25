@@ -111,6 +111,10 @@ services:
       - 8096:8096
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.homelab`)"
+      - "traefik.http.routers.jellyfin.entrypoints=web"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     restart: unless-stopped
   audiobookshelf:
     container_name: audiobookshelf
