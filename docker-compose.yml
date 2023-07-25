@@ -210,6 +210,10 @@ services:
       - 8787:8787
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.readarr.rule=Host(`readarr.homelab`)"
+      - "traefik.http.routers.readarr.entrypoints=web"
+      - "traefik.http.services.readarr.loadbalancer.server.port=8787"
     restart: unless-stopped
   prowlarr:
     container_name: prowlarr
