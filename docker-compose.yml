@@ -57,6 +57,7 @@ services:
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     restart: unless-stopped
   traefik:
+    # TODO: Get rid of debugging features
     container_name: traefik
     image: traefik:v2.10
     command:
@@ -162,9 +163,9 @@ services:
       - NET_ADMIN
     environment:
       TZ: ${TZ}
-      NET_LOCAL: ${NET_LOCAL}
+      NET_LOCAL: ${NORDLYNX_NET_LOCAL}
       QUERY: filters\[servers_groups\]\[identifier\]=legacy_p2p
-      PRIVATE_KEY: ${VPN_PRIVATE_KEY}
+      PRIVATE_KEY: ${NORDLYNX_PRIVATE_KEY}
     ports:
       - 8081:8081
     sysctls:
