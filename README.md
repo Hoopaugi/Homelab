@@ -38,6 +38,12 @@ Getting it all up and running:
 
 ## Management Services
 
+### Dashy
+
+> Dashy is an open source, highly customizable, easy to use, privacy-respecting dashboard app.
+
+[dashy.to](https://dashy.to/) | [Docker Hub](https://hub.docker.com/r/lissy93/dashy) | [Github](https://github.com/Lissy93/dashy)
+
 ### Grafana
 
 > Grafana is a multi-platform open source analytics and interactive visualization web application.

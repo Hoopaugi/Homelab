@@ -2,6 +2,24 @@ version: "3.8"
 
 services:
   # Management
+  dashy:
+    container_name: Dashy
+    image: lissy93/dashy:latest
+    ports:
+      - 4000:80
+    volumes:
+      - ./config/dashy.yml:/app/public/conf.yml
+    environment:
+      NODE_ENV: production
+      UID: 1000
+      GID: 1000
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashy.rule=Host(`dashy.homelab`)"
+      - "traefik.http.routers.dashy.entrypoints=web"
+      - "traefik.http.services.dashy.loadbalancer.server.port=4000"
+    restart: unless-stopped
   grafana:
     container_name: grafana
     image: grafana/grafana:latest
@@ -47,7 +65,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
