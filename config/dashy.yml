@@ -1,0 +1,8 @@
+pageInfo:
+  title: Homelab
+sections:
+- name: Ubuntu-Server
+  items:
+  - title: Radarr
+    icon: favicon
+    url: http://192.168.2.10:7878/

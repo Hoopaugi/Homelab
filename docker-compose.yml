@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # Management
   dashy:
-    container_name: Dashy
+    container_name: dashy
     image: lissy93/dashy:latest
     ports:
       - 4000:80
