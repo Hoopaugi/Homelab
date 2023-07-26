@@ -64,6 +64,8 @@ In the web interface, under `Local DNS` => `DNS Records`, create a new record fo
 
 > An open-source monitoring system with a dimensional data model, flexible query language, efficient time series database and modern alerting approach.
 
+Create a config file `prometheus.yml` in the config folder according to the `example.prometheus.yml` file
+
 [prometheus.io](https://prometheus.io/) | [Docker Hub](https://hub.docker.com/r/prom/prometheus/) | [Github](https://github.com/prometheus/prometheus/)
 
 ### Traefik
@@ -167,3 +169,68 @@ Go through the settings, skipping indexer setup, as the indexers are managed by 
 Go through the settings, skipping indexer setup, as the indexers are managed by prowlarr.
 
 [sonarr.tv](https://sonarr.tv/) | [Docker Hub](https://hub.docker.com/r/linuxserver/sonarr) | [Github](https://github.com/linuxserver/docker-sonarr)
+
+## Other services
+
+### Node Exporter
+
+Provices statistics from the host system, imported into prometheus and shown in grafana
+
+[Instructions from](https://developer.couchbase.com/tutorial-node-exporter-setup)
+
+Download repo
+
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+
+Create new user and group for the service
+
+        sudo groupadd -f node_exporter
+
+        sudo useradd -g node_exporter --no-create-home --shell /bin/false node_exporter
+
+Unpack node_exporter and move it
+
+        tar -xvf node_exporter-1.6.1.linux-amd64.tar.gz
+
+        sudo cp node_exporter-1.6.1.linux-amd64/node_exporter /usr/bin/
+
+Set owner
+
+        sudo chown node_exporter:node_exporter /usr/bin/node_exporter
+
+Create the service file
+
+        sudo nano /usr/lib/systemd/system/node_exporter.service
+
+Service file:
+
+        [Unit]
+        Description=Node Exporter
+        Documentation=https://prometheus.io/docs/guides/node-exporter/
+        Wants=network-online.target
+        After=network-online.target
+
+        [Service]
+        User=node_exporter
+        Group=node_exporter
+        Type=simple
+        Restart=on-failure
+        ExecStart=/usr/bin/node_exporter \
+        --web.listen-address=:9200
+
+        [Install]
+        WantedBy=multi-user.target
+
+Set permissions
+
+        sudo chmod 664 /usr/lib/systemd/system/node_exporter.service
+
+Start and enable the service
+
+        sudo systemctl daemon-reload
+
+        sudo systemctl start node_exporter
+
+        sudo systemctl status node_exporter
+
+        sudo systemctl enable node_exporter.service
