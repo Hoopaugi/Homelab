@@ -1,8 +1,49 @@
 pageInfo:
   title: Homelab
 sections:
-- name: Ubuntu-Server
+- name: Ubuntu-Server - Management
   items:
+  - title: Dashy
+    icon: favicon
+    url: http://192.168.2.10:4000/
+  - title: Grafana
+    icon: favicon
+    url: http://192.168.2.10:3000/
+  - title: PiHole
+    icon: favicon
+    url: http://192.168.2.10:30080/
+  - title: Prometheus
+    icon: favicon
+    url: http://192.168.2.10:9090/
+  - title: Uptime-Kuma
+    icon: favicon
+    url: http://192.168.2.10:3001/
+- name: Ubuntu-Server - Media
+  items:
+  - title: Audiobookshelf
+    icon: favicon
+    url: http://192.168.2.10:13378/
+  - title: Jellyfin
+    icon: favicon
+    url: http://192.168.2.10:8096/
+  - title: Jellyseerr
+    icon: favicon
+    url: http://192.168.2.10:5055/
+  - title: Lidarr
+    icon: favicon
+    url: http://192.168.2.10:8686/
+  - title: Prowlarr
+    icon: favicon
+    url: http://192.168.2.10:9696/
+  - title: qBittorrent
+    icon: favicon
+    url: http://192.168.2.10:8081/
   - title: Radarr
+    icon: favicon
+    url: http://192.168.2.10:7878/
+  - title: Readarr
+    icon: favicon
+    url: http://192.168.2.10:8787/
+  - title: Sonarr
     icon: favicon
     url: http://192.168.2.10:7878/

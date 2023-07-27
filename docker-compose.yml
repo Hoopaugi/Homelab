@@ -3,6 +3,7 @@ version: "3.8"
 services:
   # Management
   dashy:
+    # FIXME: Traefik routing is broken (Bad gateway)
     container_name: dashy
     image: lissy93/dashy:latest
     ports:
