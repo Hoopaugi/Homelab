@@ -297,6 +297,7 @@ services:
     volumes:
       - sonarr_config:/config
       - ${MEDIA_ROOT}/shows:/shows
+      - ${MEDIA_ROOT}/anime:/anime
       - ${DOWNLOAD_ROOT}:/downloads
     ports:
       - 8989:8989
