@@ -134,6 +134,17 @@ services:
       - "traefik.http.routers.audiobookshelf.entrypoints=web"
       - "traefik.http.services.audiobookshelf.loadbalancer.server.port=13378"
     restart: unless-stopped
+  flaresolverr:
+    container_name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    environment:
+      LOG_LEVEL: info
+      TZ: ${TZ}
+    ports:
+      - 8191:8191
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
   jellyfin:
     container_name: jellyfin
     image: lscr.io/linuxserver/jellyfin:latest

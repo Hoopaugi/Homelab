@@ -100,6 +100,12 @@ If you want access via the android client, you will have to do some port forward
 
 [audiobookshelf.org](https://www.audiobookshelf.org/) | [Docker Hub](https://hub.docker.com/r/advplyr/audiobookshelf) | [Github](https://github.com/advplyr/audiobookshelf)
 
+### Flaresolverr
+
+> FlareSolverr is a proxy server to bypass Cloudflare and DDoS-GUARD protection.
+
+[Docker Hub](https://hub.docker.com/r/flaresolverr/flaresolverr) | [Github](https://github.com/FlareSolverr/FlareSolverr)
+
 ### Jellyfin
 
 > Jellyfin is a free and open-source media server and suite of multimedia applications designed to organize, manage, and share digital media files to networked devices.
