@@ -21,7 +21,7 @@ scrape_configs:
     - localhost:9090
 - job_name: ubuntu-server
   static_configs:
-  - targets: ['192.168.2.10:9100']
+  - targets: ['192.168.2.10:9200']
 - job_name: ubuntu-desktop
   static_configs:
-  - targets: ['192.168.2.100:9100']
+  - targets: ['192.168.2.100:9200']

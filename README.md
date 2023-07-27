@@ -108,6 +108,12 @@ To access from external networks, you will have to port forward and have a domai
 
 [jellyfin.org](https://jellyfin.org/) | [Docker Hub](https://hub.docker.com/r/linuxserver/jellyfin) | [Github](https://github.com/linuxserver/docker-jellyfin)
 
+### Jellyseerr
+
+> Jellyseerr is a free and open source software application for managing requests for your media library.
+
+[Docker Hub](https://hub.docker.com/r/fallenbagel/jellyseerr) | [Github](https://github.com/Fallenbagel/jellyseerr)
+
 ### Lidarr
 
 > Lidarr is a music collection manager for Usenet and BitTorrent users.

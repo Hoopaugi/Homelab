@@ -154,6 +154,22 @@ services:
       - "traefik.http.routers.jellyfin.entrypoints=web"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     restart: unless-stopped
+  jellyseerr:
+    container_name: jellyseerr
+    image: fallenbagel/jellyseerr:latest
+    environment:
+      TZ: '${TZ}'
+    ports:
+      - 5055:5055
+    volumes:
+      - jellyseerr_config:/app/config
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyseerr.rule=Host(`jellyseerr.homelab`)"
+      - "traefik.http.routers.jellyseerr.entrypoints=web"
+      - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
+    restart: unless-stopped
   lidarr:
     container_name: lidarr
     image: lscr.io/linuxserver/lidarr:latest
@@ -297,6 +313,7 @@ volumes:
   audiobookshelf_metadata:
   grafana-data:
   jellyfin_config:
+  jellyseerr_config:
   lidarr_config:
   pihole_etc-dnsmasq.d:
   pihole_etc-pihole:
