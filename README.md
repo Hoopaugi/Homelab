@@ -100,6 +100,12 @@ If you want access via the android client, you will have to do some port forward
 
 [audiobookshelf.org](https://www.audiobookshelf.org/) | [Docker Hub](https://hub.docker.com/r/advplyr/audiobookshelf) | [Github](https://github.com/advplyr/audiobookshelf)
 
+### Bazarr
+
+> Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles based on your requirements.
+
+[bazarr.media](https://www.bazarr.media/) | [Docker Hub](https://hub.docker.com/r/linuxserver/bazarr) | [Github](https://github.com/linuxserver/docker-bazarr)
+
 ### Flaresolverr
 
 > FlareSolverr is a proxy server to bypass Cloudflare and DDoS-GUARD protection.

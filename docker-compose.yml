@@ -135,6 +135,27 @@ services:
       - "traefik.http.routers.audiobookshelf.entrypoints=web"
       - "traefik.http.services.audiobookshelf.loadbalancer.server.port=13378"
     restart: unless-stopped
+  bazarr:
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - bazarr_config:/config
+      - ${MEDIA_ROOT}/movies:/movies
+      - ${MEDIA_ROOT}/shows:/shows
+      - ${MEDIA_ROOT}/anime:/anime
+    ports:
+      - 6767:6767
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.homelab`)"
+      - "traefik.http.routers.bazarr.entrypoints=web"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+    restart: unless-stopped
   flaresolverr:
     container_name: flaresolverr
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -324,6 +345,7 @@ services:
 volumes:
   audiobookshelf_config:
   audiobookshelf_metadata:
+  bazarr_config:
   grafana-data:
   jellyfin_config:
   jellyseerr_config:
