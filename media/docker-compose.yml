@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - prowlarr_config:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - radarr_config:/config
+      - ${MEDIA_ROOT}/movies:/movies
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      TZ: '${TZ}'
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - sonarr_config:/config
+      - ${MEDIA_ROOT}/shows:/shows
+      - ${MEDIA_ROOT}/anime:/anime
+      - ${DOWNLOAD_ROOT}:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+volumes:
+  prowlarr_config:
+  radarr_config:
+  sonarr_config:
